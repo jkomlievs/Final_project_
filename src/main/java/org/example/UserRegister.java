@@ -4,20 +4,17 @@ public class UserRegister {
 
     private String email;
     private String password;
-    private String submitPassword;
 
-    public UserRegister(String email, String password, String submitPassword) {
+    public UserRegister(String email, String password) {
         this.email = email;
         this.password = password;
-        this.submitPassword = submitPassword;
     }
 
     public String getEmail() {
-        return email; }
+        return email;
+    }
+
     public String getPassword() {
         return password;
-    }
-    public String getSubmitPassword() {
-        return submitPassword;
     }
 }

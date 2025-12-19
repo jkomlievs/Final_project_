@@ -1,12 +1,12 @@
 package org.example.steps;
 
-import io.cucumber.java.en.*;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.example.AuthorizationPage;
 import org.example.CreateAdvertPage;
 import org.example.MainPage;
-
 import static com.codeborne.selenide.Selenide.open;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CreateAdvertSteps {
 
@@ -14,7 +14,7 @@ public class CreateAdvertSteps {
     private  MainPage mainPage = new MainPage();
     private  AuthorizationPage authorizationPage = new AuthorizationPage();
 
-    private String advertName = "Morgan";
+    private String advertName = "Morgan Super5";
     private String description = "автомобиль";
     private String price = "200000000";
 
@@ -46,17 +46,10 @@ public class CreateAdvertSteps {
         mainPage.clickApplyButton();
         mainPage.checkAdvertIsVisible(advertName);
     }
-
-    @Then("user deletes the advert")
-    public void userDeletesAdvert() {
+    @And("the user delete the advert")
+    public void userDeleteAdvert() {
         mainPage.clickAdvertCard();
         mainPage.clickDeleteCard();
-        assertTrue(mainPage.isCardDeleted(advertName), "Карточка должна быть удалена");
-        authorizationPage.clickLogoutButton();
     }
 
-    @Then("advert should be removed")
-    public void advertShouldBeRemoved() {
-        assertTrue(mainPage.isCardDeleted(advertName));
-    }
 }

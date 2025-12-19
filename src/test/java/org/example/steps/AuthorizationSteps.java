@@ -3,6 +3,7 @@ package org.example.steps;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.example.AuthorizationPage;
+import org.example.UserService;
 
 public class AuthorizationSteps {
 
@@ -10,19 +11,23 @@ public class AuthorizationSteps {
 
     @When("I open login form")
     public void openLoginForm() {
+
+        var user = UserService.registerUser();
         authorizationPage.clickLoginAndRegisterButton();
         authorizationPage.clickLoginButton();
     }
 
     @When("I login with valid credentials")
     public void loginWithValidCredentials() {
-        authorizationPage.enterEmail("mariatest13@yandex.ru");
-        authorizationPage.enterPassword("12345678");
+        var user = UserService.registerUser();
+        authorizationPage.enterEmail(user.getEmail());
+        authorizationPage.enterPassword(user.getPassword());
         authorizationPage.clickLoginButton();
     }
 
-    @Then("user should be logged in")
-    public void userShouldBeLoggedIn() {
-
+    @Then("The user should be logged In")
+    public void userShouldBeLoggedIn() { //проверка,что пользователь авторизовался
+        authorizationPage.clickAvatar();
+        authorizationPage.checkProfilePageIsVisible();
     }
 }

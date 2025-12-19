@@ -1,7 +1,12 @@
 package org.example.steps;
 
-import io.cucumber.java.en.*;
-import org.example.*;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import org.example.CreateAdvertPage;
+import org.example.EditAdvertPage;
+import org.example.MainPage;
 
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,9 +17,8 @@ public class EditAdvertSteps {
     private final EditAdvertPage editAdvertPage = new EditAdvertPage();
     private final MainPage mainPage = new MainPage();
 
-    private final String advertName = "Morgan";
+    private final String advertName = "Morgan Super5";
     String expectedPrice = "200 000 001 ₽";
-    String newPrice = "200000001";
 
     @Given("user creates a new advert with price {string}")
     public void userCreatesNewAdvert(String price) {
@@ -51,5 +55,10 @@ public class EditAdvertSteps {
         mainPage.clickApplyButton();
         mainPage.checkPriceVisible();
         assertEquals(expectedPrice, mainPage.getAdvertPrice());
+    }
+    @And("user deletes the advert")
+    public void userDeletesAdvert() {
+        mainPage.clickAdvertCard();
+        mainPage.clickDeleteCard();
     }
 }

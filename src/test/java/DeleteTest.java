@@ -1,3 +1,4 @@
+
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import io.qameta.allure.Description;
@@ -5,18 +6,19 @@ import io.qameta.allure.Step;
 import io.restassured.RestAssured;
 import org.example.AuthorizationPage;
 import org.example.CreateAdvertPage;
-import org.example.EditAdvertPage;
+import org.example.DeleteAdvertPage;
 import org.example.MainPage;
 import org.example.UserService;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api .AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Selenide.open;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class EditAdvertTest {
+public class DeleteTest {
+
 
     @BeforeEach
     public void setUp() {
@@ -26,69 +28,50 @@ public class EditAdvertTest {
         Configuration.browserSize = "1920x1080";
         Configuration.baseUrl = UserService.baseURL;
     }
-
-    @DisplayName("Редактирование объявления")
-    @Description("Успешное редактирование своего объявления")
-    @Step("Редактируем свое объявление")
     @Test
-    public void editAdvertAndCheckPriceTest() {
+    @DisplayName("Удаление объявления")
+    @Step("Проверка удаления своего объявления")
+    public void deleteCartTest(){
 
         MainPage mainPage = new MainPage();
         AuthorizationPage authorizationPage = new AuthorizationPage();
         CreateAdvertPage createAdvertPage = new CreateAdvertPage();
-        EditAdvertPage editAdvertPage = new EditAdvertPage();
+        DeleteAdvertPage deleteAdvertPage = new DeleteAdvertPage();
 
         var user = UserService.registerUser();
 
-        String advertName = "Morgan Super5";
-        String expectedPrice = "200 000 001 ₽";
+        String title = "Mustang";
 
         open("/");
         authorizationPage.clickLoginAndRegisterButton();
-        authorizationPage.clickLoginButton();
         authorizationPage.enterEmail(user.getEmail());
         authorizationPage.enterPassword(user.getPassword());
         authorizationPage.clickLoginButton();
 
         createAdvertPage.clickCreateAdvert();
         createAdvertPage.uploadPhoto();
-        createAdvertPage.setProductName(advertName);
+        createAdvertPage.setProductName("Mustang");
         createAdvertPage.selectCategory("Авто");
         createAdvertPage.selectNewCondition();
         createAdvertPage.selectCityMoscow();
-        createAdvertPage.enterDescription("автомобиль");
-        createAdvertPage.enterPrice("200000000");
+        createAdvertPage.enterDescription("это авто");
+        createAdvertPage.enterPrice("200");
         createAdvertPage.clickPublishButton();
 
-        mainPage.search(advertName);
+        mainPage.search(title);
         mainPage.clickApplyButton();
-        mainPage.clickAdvertCard();
-        editAdvertPage.clickEditAdvertButton();
+        deleteAdvertPage.clickTitleCard();
+        deleteAdvertPage.clickDeleteCard();
 
-        createAdvertPage.enterPrice("200000001");
-        editAdvertPage.setSaveChangesButton();
-
-        open("/");
-        mainPage.search(advertName);
+        mainPage.search(title); //поиск по карточке
         mainPage.clickApplyButton();
-
-        mainPage.checkPriceVisible();
-        String actualPrice = mainPage.getAdvertPrice();
-
-        Assertions.assertEquals(
-                expectedPrice,
-                actualPrice,
-                "Цена объявления не обновилась после редактирования"
+        assertTrue(                    // проверка что не отображается
+                deleteAdvertPage.isAdvertNotPresent(title),
+                "Объявление не должно отображаться в результатах поиска"
         );
 
-        mainPage.clickAdvertCard();
-        mainPage.clickDeleteCard();//сделала удаление, чтобы при прогонах не дублировались карточки и не вызывали баги
-
         authorizationPage.clickLogoutButton();
-
     }
-
-    @Step("Закрываем браузер")
     @AfterEach
     public void closeBrowser() {
 

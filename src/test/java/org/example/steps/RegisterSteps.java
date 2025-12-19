@@ -4,10 +4,12 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
-import io.cucumber.java.en.*;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.example.RegisterPage;
-import org.example.UserGenerator;
-import org.example.UserMethods;
+import org.example.UserService;
+import org.example.UserUtils;
 
 public class RegisterSteps {
 
@@ -19,7 +21,7 @@ public class RegisterSteps {
     public void setUp() {
         Configuration.browser = "chrome";
         Configuration.browserSize = "1920x1080";
-        Configuration.baseUrl = UserMethods.baseURL;
+        Configuration.baseUrl = UserService.baseURL;
 
         registerPage = new RegisterPage();
     }
@@ -31,9 +33,9 @@ public class RegisterSteps {
 
     @Given("the user is already registered via API")
     public void theUserIsAlreadyRegisteredViaApi() {
-        email = UserMethods.LOGIN_1;
-        password = UserMethods.PASSWORD_1;
-        UserMethods.doubleRegister(email, password, password);
+        var user = UserService.registerUser();
+        email = user.getEmail();
+        password = user.getPassword();
     }
 
     @When("the user opens the registration form")
@@ -44,8 +46,8 @@ public class RegisterSteps {
 
     @When("the user enters valid registration data")
     public void theUserEntersValidRegistrationData() {
-        email = UserGenerator.getNewRandomEmail();
-        password = UserGenerator.DEFAULT_PASSWORD;
+        email = UserUtils.getNewRandomEmail();
+        password = UserUtils.getRandomPassword();
         registerPage.setUserData(email, password, password);
     }
 

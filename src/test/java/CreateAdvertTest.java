@@ -6,14 +6,13 @@ import io.restassured.RestAssured;
 import org.example.AuthorizationPage;
 import org.example.CreateAdvertPage;
 import org.example.MainPage;
-import org.example.UserMethods;
+import org.example.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Selenide.open;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class CreateAdvertTest {
@@ -21,10 +20,10 @@ public class CreateAdvertTest {
     @BeforeEach
     public void setUp() {
 
-        RestAssured.baseURI = UserMethods.baseURL;
+        RestAssured.baseURI = UserService.baseURL;
         Configuration.browser = "chrome";
         Configuration.browserSize = "1920x1080";
-        Configuration.baseUrl = UserMethods.baseURL;
+        Configuration.baseUrl = UserService.baseURL;
     }
 
     @DisplayName("Создание объявления")
@@ -37,15 +36,15 @@ public class CreateAdvertTest {
         AuthorizationPage authorizationPage = new AuthorizationPage();
         MainPage mainPage = new MainPage();
 
-        String email = UserMethods.LOGIN_1;
-        String password = UserMethods.PASSWORD_1;
-        String advertName = "Morgan";
+        var user = UserService.registerUser();
+
+        String advertName = "Morgan Super5";
 
         open("/");
         authorizationPage.clickLoginAndRegisterButton();
         authorizationPage.clickLoginButton();
-        authorizationPage.enterEmail(email);
-        authorizationPage.enterPassword(password);
+        authorizationPage.enterEmail(user.getEmail());
+        authorizationPage.enterPassword(user.getPassword());
         authorizationPage.clickLoginButton();
 
         createAdvertPage.clickCreateAdvert();
@@ -62,10 +61,12 @@ public class CreateAdvertTest {
         mainPage.search(advertName);
         mainPage.clickApplyButton();
         mainPage.checkAdvertIsVisible(advertName);
+
         mainPage.clickAdvertCard();
-        mainPage.clickDeleteCard();
-        assertTrue(mainPage.isCardDeleted(advertName), "Карточка должна быть удалена");
+        mainPage.clickDeleteCard();//сделала удаление, чтобы при прогонах не дублировались карточки и не вызывали баги
+
         authorizationPage.clickLogoutButton();
+
     }
     @Step("Закрываем браузер")
     @AfterEach

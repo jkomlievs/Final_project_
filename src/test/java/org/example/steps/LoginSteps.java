@@ -2,7 +2,8 @@ package org.example.steps;
 
 import io.cucumber.java.en.Given;
 import org.example.AuthorizationPage;
-import org.example.UserMethods;
+import org.example.UserService;
+import org.example.UserUtils;
 
 public class LoginSteps {
 
@@ -10,10 +11,11 @@ public class LoginSteps {
 
     @Given("user is logged in")
     public void userIsLoggedIn() {
+        var user = UserService.registerUser();
         authorizationPage.clickLoginAndRegisterButton();
         authorizationPage.clickLoginButton();
-        authorizationPage.enterEmail(UserMethods.LOGIN_1);
-        authorizationPage.enterPassword(UserMethods.PASSWORD_1);
+        authorizationPage.enterEmail(user.getEmail());
+        authorizationPage.enterPassword(user.getPassword());
         authorizationPage.clickLoginButton();
     }
 }

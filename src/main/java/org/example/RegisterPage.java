@@ -1,20 +1,22 @@
 package org.example;
 
 import com.codeborne.selenide.SelenideElement;
-import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.Condition.*;
+
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$x;
 
 public class RegisterPage {
 
-    private  SelenideElement loginAndRegisterButton = $x("//button[normalize-space()='Вход и регистрация']");
-    private  SelenideElement emailField = $x("//input[contains(@name,'email')]");
-    private  SelenideElement passwordField = $x("//input[@type='password']");
-    private  SelenideElement submitPasswordField = $x("//input[@name='submitPassword']");
-    private  SelenideElement registerButton = $x("//button[contains(text(),'Нет аккаунта')]");
-    private  SelenideElement createAccountButton = $x(".//button[text()='Создать аккаунт']");
-    private  SelenideElement userNameProfile = $x("//h3[contains(@class,'profileText') and contains(text(),'User')]");
-    private  SelenideElement errorMessage = $x("//span[contains(@class,'input_span') and text()='Ошибка']");
-    private  SelenideElement logoutButton = $x("//button[normalize-space()='Выйти']");
+    private  final SelenideElement loginAndRegisterButton = $x("//button[normalize-space()='Вход и регистрация']");
+    private  final SelenideElement emailField = $x("//input[contains(@name,'email')]");
+    private  final SelenideElement passwordField = $x("//input[@type='password']");
+    private  final SelenideElement submitPasswordField = $x("//input[@name='submitPassword']");
+    private  final SelenideElement registerButton = $x("//button[contains(text(),'Нет аккаунта')]");
+    private  final SelenideElement createAccountButton = $x(".//button[text()='Создать аккаунт']");
+    private  final SelenideElement userNameProfile = $x("//h3[contains(@class,'profileText') and contains(text(),'User')]");
+    private  final SelenideElement errorMessage = $x("//span[contains(@class,'input_span') and text()='Ошибка']");
+    private  final SelenideElement logoutButton = $x("//button[normalize-space()='Выйти']");
 
 
     public void setUserData(String email, String password, String submitPassword) {
